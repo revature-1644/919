@@ -1,5 +1,6 @@
 import Controller.Controller;
 import DAO.PaintingDAO;
+import Exceptions.PaintingAlreadyExistsException;
 import Model.Painting;
 import Service.PaintingService;
 import Util.ConnectionSingleton;
@@ -26,7 +27,13 @@ public class Application {
                 System.out.println("enter author");
                 String author = sc.nextLine();
                 Painting p = new Painting(title, author);
-                paintingService.savePainting(p);
+
+                try{
+                    paintingService.savePainting(p);
+                }catch(PaintingAlreadyExistsException e){
+                    System.out.println("That painting already exists!");
+                }
+
 
             }else if(choice == 2){
 

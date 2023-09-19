@@ -66,12 +66,49 @@ public class PaintingDAO {
         return paintingList;
     }
 
-    public void updatePainting(Painting p){
+    /**
+     * return a painting based off of a match in title and author, if no such match occurs in the database,
+     * return null.
+     * @param p
+     * @return
+     */
+    public Painting queryPaintingsByTitleAndAuthor(Painting p){
+        try{
+            PreparedStatement ps = conn.prepareStatement("select * from painting where title = ? and author = ?");
+            ps.setString(1, p.getTitle());
+            ps.setString(2, p.getAuthor());
+            ResultSet rs = ps.executeQuery();
+            if(rs.next()){
+                String dbTitle = rs.getString("title");
+                String dbAuthor = rs.getString("author");
+                Painting dbPainting = new Painting(dbTitle, dbAuthor);
+                return dbPainting;
+            }
+        }catch(SQLException e){
+            e.printStackTrace();
+        }
+        return null;
+    }
 
+    public void updatePainting(Painting p){
+        try{
+            PreparedStatement ps = conn.prepareStatement("update painting set author = ? where title = ?");
+            ps.setString(1, p.getAuthor());
+            ps.setString(2, p.getTitle());
+            ps.executeUpdate();
+        }catch(SQLException e){
+            e.printStackTrace();
+        }
     }
 
     public void deletePainting(String title){
-
+        try{
+            PreparedStatement ps = conn.prepareStatement("delete painting where title = ?");
+            ps.setString(1, title);
+            ps.executeUpdate();
+        }catch(SQLException e){
+            e.printStackTrace();
+        }
     }
 
 }

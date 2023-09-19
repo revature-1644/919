@@ -29,9 +29,15 @@ public class Painting extends Object{
         this.author = author;
     }
 
-
+    /**
+     * serialize this object into a text-based piece of information
+     * @return
+     */
     @Override
-    public String toString(){
-        return "Painting title:"+title+" author"+author;
+    public String toString() {
+        return "Painting{" +
+                "title='" + title + '\'' +
+                ", author='" + author + '\'' +
+                '}';
     }
 }

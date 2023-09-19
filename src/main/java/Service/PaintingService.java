@@ -1,6 +1,7 @@
 package Service;
 
 import DAO.PaintingDAO;
+import Exceptions.PaintingAlreadyExistsException;
 import Model.Painting;
 
 import java.util.List;
@@ -17,8 +18,18 @@ public class PaintingService {
         this.paintingDAO = paintingDAO;
     }
 
-    public void savePainting(Painting p){
-        paintingDAO.insertPainting(p);
+    /**
+     * check if painting match already exists in the database, if it does, throw an exception.
+     * otherwise, save the painting.
+     * @param p
+     */
+    public void savePainting(Painting p) throws PaintingAlreadyExistsException {
+        Painting dbPainting = paintingDAO.queryPaintingsByTitleAndAuthor(p);
+        if (dbPainting == null) {
+            paintingDAO.insertPainting(p);
+        }else{
+            throw new PaintingAlreadyExistsException();
+        }
     }
 
     public List<Painting> getPaintingsByAuthor(String author){
@@ -27,11 +38,11 @@ public class PaintingService {
     }
 
     public void updatePainting(Painting p){
-
+        paintingDAO.updatePainting(p);
     }
 
     public void deletePainting(String title){
-
+        paintingDAO.deletePainting(title);
     }
 
 }
