@@ -1,6 +1,6 @@
 package Model;
 
-public class Painting {
+public class Painting extends Object{
     private String title;
     private String author;
 
@@ -27,5 +27,11 @@ public class Painting {
 
     public void setAuthor(String author) {
         this.author = author;
+    }
+
+
+    @Override
+    public String toString(){
+        return "Painting title:"+title+" author"+author;
     }
 }

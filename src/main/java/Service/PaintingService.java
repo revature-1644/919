@@ -5,6 +5,11 @@ import Model.Painting;
 
 import java.util.List;
 
+/**
+ * Service used for CRUD operations on paintings
+ * Create Read Update Delete
+ * (ie, an application that doesn't require any complicated programming logic - just a path from user input to data layer)
+ */
 public class PaintingService {
     private PaintingDAO paintingDAO;
 
@@ -13,11 +18,12 @@ public class PaintingService {
     }
 
     public void savePainting(Painting p){
-
+        paintingDAO.insertPainting(p);
     }
 
     public List<Painting> getPaintingsByAuthor(String author){
-        return null;
+        List<Painting> paintingList = paintingDAO.queryPaintingsByAuthor(author);
+        return paintingList;
     }
 
     public void updatePainting(Painting p){

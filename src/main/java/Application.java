@@ -33,6 +33,7 @@ public class Application {
                 System.out.println("enter author");
                 String author = sc.nextLine();
                 List<Painting> paintingList = paintingService.getPaintingsByAuthor(author);
+                System.out.println(paintingList);
 
             }else if(choice ==3) {
 
