@@ -1,0 +1,4 @@
+ - Add paintings (title and author)
+ - Get paintings by author
+ - Update the author of a painting which has a specific title
+ - Delete a painting with a specific title, if it exists
