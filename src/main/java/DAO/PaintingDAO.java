@@ -115,4 +115,36 @@ public class PaintingDAO {
         }
     }
 
+    public List<Painting> queryPaintingByYear(int year) {
+        List<Painting> paintingList = new ArrayList<>();
+        try{
+            PreparedStatement ps = conn.prepareStatement("select * from painting where year_made = ? order by year_made asc");
+            ps.setInt(1, year);
+            ResultSet rs = ps.executeQuery();
+            while(rs.next()){
+                Painting dbPainting = new Painting(rs.getInt("painting_id"), rs.getString("title"),
+                        rs.getInt("made_by"), rs.getInt("year_made"));
+                paintingList.add(dbPainting);
+            }
+        }catch(SQLException e){
+            e.printStackTrace();
+        }
+        return paintingList;
+    }
+    public List<Painting> queryPaintingBeforeYear(int year) {
+        List<Painting> paintingList = new ArrayList<>();
+        try{
+            PreparedStatement ps = conn.prepareStatement("select * from painting where year_made < ?");
+            ps.setInt(1, year);
+            ResultSet rs = ps.executeQuery();
+            while(rs.next()){
+                Painting dbPainting = new Painting(rs.getInt("painting_id"), rs.getString("title"),
+                        rs.getInt("made_by"), rs.getInt("year_made"));
+                paintingList.add(dbPainting);
+            }
+        }catch(SQLException e){
+            e.printStackTrace();
+        }
+        return paintingList;
+    }
 }

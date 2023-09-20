@@ -1,4 +1,3 @@
-
 drop table painting_exhibition_junction if exists;
 drop table exhibition if exists;
 drop table painting if exists;
@@ -17,6 +16,8 @@ create table painting (painting_id int primary key, title varchar(255), year_mad
 insert into author (author_id, name, author_nationality, author_year_born) values (111, 'van gogh', 'dutch', 1853);
 insert into painting (painting_id, title, year_made, made_by) values (2222, 'starry night', 1880, 111);
 insert into painting (painting_id, title, year_made, made_by) values (2223, 'self portrait', 1880, 111);
+
+insert into painting (painting_id, title, year_made, made_by) values (2224, 'sample painting', 1890, 111);
 --sql keeps track of all relationships we establish between tables - and it must maintain a logical organization
 --which it refers to as referential integrity - a fkey must always either point to a REAL value or be null
 --multiple foreign keys can point to the same primary key - a author may have many paintings - one-to-many relationship

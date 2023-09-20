@@ -27,11 +27,15 @@ public class PaintingService {
      */
     public void savePainting(Painting p, String name) throws PaintingAlreadyExistsException {
         int authorId = authorService.getIdFromName(name);
+//        i need to check if the painting already exists if i try to save it.
         Painting dbPainting = paintingDAO.queryPaintingsByTitleAndAuthor(p.getTitle(), authorId);
+//        if it's null, i assume it doesn't exist, and i proceed with the insert.
         if (dbPainting == null) {
+//            set the fkey that we just found by name for inserting the painting
             p.setAuthorFkey(authorId);
             paintingDAO.insertPainting(p);
         }else{
+//            if it does exist, throw an exception to the user input layer so it may inform the user.
             throw new PaintingAlreadyExistsException();
         }
     }
@@ -47,6 +51,14 @@ public class PaintingService {
 
     public void deletePainting(String title){
         paintingDAO.deletePainting(title);
+    }
+
+    public List<Painting> getPaintingsFromYear(int year){
+        return paintingDAO.queryPaintingByYear(year);
+    }
+
+    public List<Painting> getPaintingsBeforeYear(int year){
+        return paintingDAO.queryPaintingBeforeYear(year);
     }
 
 }

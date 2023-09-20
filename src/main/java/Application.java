@@ -23,7 +23,7 @@ public class Application {
         Scanner sc = new Scanner(System.in);
         while(true){
             System.out.println("1: add new painting 2: get paintings by author 3: update the author of painting " +
-                    "4: delete painting by title");
+                    "4: delete painting by title 5: search paintings by year 6: search paintings before year");
             int choice = Integer.parseInt(sc.nextLine());
             if(choice == 1){
                 System.out.println("enter painting id");
@@ -64,6 +64,18 @@ public class Application {
                 System.out.println("enter title");
                 String title = sc.nextLine();
                 paintingService.deletePainting(title);
+
+            }else if(choice == 5){
+                System.out.println("enter year");
+                int yearInput = Integer.parseInt(sc.nextLine());
+                List<Painting> paintingList = paintingService.getPaintingsFromYear(yearInput);
+                System.out.println(paintingList);
+
+            }else if(choice == 6){
+                System.out.println("enter year");
+                int yearInput = Integer.parseInt(sc.nextLine());
+                List<Painting> paintingList = paintingService.getPaintingsBeforeYear(yearInput);
+                System.out.println(paintingList);
 
             }else{
                 System.out.println("invalid choice");
