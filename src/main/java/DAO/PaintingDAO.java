@@ -32,9 +32,11 @@ public class PaintingDAO {
     public void insertPainting(Painting p){
         try{
 //            using preparedstatement's ? ? syntax prevents SQL injection
-            PreparedStatement ps = conn.prepareStatement("insert into painting (title, author) values (?, ?)");
-            ps.setString(1, p.getTitle());
-            ps.setString(2, p.getAuthor());
+            PreparedStatement ps = conn.prepareStatement("insert into painting (painting_id, title, year_made, made_by) values (?, ?, ?, ?)");
+            ps.setInt(1, p.getPaintingId());
+            ps.setString(2, p.getTitle());
+            ps.setInt(3, p.getYearMade());
+            ps.setInt(4, p.getAuthorFkey());
             ps.executeUpdate();
 
         }catch(SQLException e){
@@ -51,13 +53,15 @@ public class PaintingDAO {
     public List<Painting> queryPaintingsByAuthor(String author){
         List<Painting> paintingList = new ArrayList<>();
         try{
-            PreparedStatement ps = conn.prepareStatement("select * from painting where author = ?");
+            PreparedStatement ps = conn.prepareStatement("select * from painting inner join author on painting.made_by = author.author_id where name = ?");
             ps.setString(1, author);
             ResultSet rs = ps.executeQuery();
             while(rs.next()){
-                String dbAuthor = rs.getString("author");
+                int dbAuthor = rs.getInt("author_id");
                 String dbTitle = rs.getString("title");
-                Painting dbPainting = new Painting(dbTitle, dbAuthor);
+                int yearMade = rs.getInt("year_made");
+                int paintingId = rs.getInt("painting_id");
+                Painting dbPainting = new Painting(paintingId, dbTitle, dbAuthor, yearMade);
                 paintingList.add(dbPainting);
             }
         }catch(SQLException e){
@@ -69,19 +73,19 @@ public class PaintingDAO {
     /**
      * return a painting based off of a match in title and author, if no such match occurs in the database,
      * return null.
-     * @param p
+     * @param
      * @return
      */
-    public Painting queryPaintingsByTitleAndAuthor(Painting p){
+    public Painting queryPaintingsByTitleAndAuthor(String title, int author){
         try{
-            PreparedStatement ps = conn.prepareStatement("select * from painting where title = ? and author = ?");
-            ps.setString(1, p.getTitle());
-            ps.setString(2, p.getAuthor());
+            PreparedStatement ps = conn.prepareStatement("select * from painting where title = ? and made_by = ?");
+            ps.setString(1, title);
+            ps.setInt(2, author);
             ResultSet rs = ps.executeQuery();
             if(rs.next()){
                 String dbTitle = rs.getString("title");
                 String dbAuthor = rs.getString("author");
-                Painting dbPainting = new Painting(dbTitle, dbAuthor);
+                Painting dbPainting = new Painting();
                 return dbPainting;
             }
         }catch(SQLException e){
@@ -93,7 +97,7 @@ public class PaintingDAO {
     public void updatePainting(Painting p){
         try{
             PreparedStatement ps = conn.prepareStatement("update painting set author = ? where title = ?");
-            ps.setString(1, p.getAuthor());
+//            ps.setString(1, p.getAuthor());
             ps.setString(2, p.getTitle());
             ps.executeUpdate();
         }catch(SQLException e){

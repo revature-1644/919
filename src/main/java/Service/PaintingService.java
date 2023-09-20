@@ -13,9 +13,11 @@ import java.util.List;
  */
 public class PaintingService {
     private PaintingDAO paintingDAO;
+    private AuthorService authorService;
 
-    public PaintingService(PaintingDAO paintingDAO){
+    public PaintingService(PaintingDAO paintingDAO, AuthorService authorService){
         this.paintingDAO = paintingDAO;
+        this.authorService = authorService;
     }
 
     /**
@@ -23,9 +25,11 @@ public class PaintingService {
      * otherwise, save the painting.
      * @param p
      */
-    public void savePainting(Painting p) throws PaintingAlreadyExistsException {
-        Painting dbPainting = paintingDAO.queryPaintingsByTitleAndAuthor(p);
+    public void savePainting(Painting p, String name) throws PaintingAlreadyExistsException {
+        int authorId = authorService.getIdFromName(name);
+        Painting dbPainting = paintingDAO.queryPaintingsByTitleAndAuthor(p.getTitle(), authorId);
         if (dbPainting == null) {
+            p.setAuthorFkey(authorId);
             paintingDAO.insertPainting(p);
         }else{
             throw new PaintingAlreadyExistsException();

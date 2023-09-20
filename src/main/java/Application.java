@@ -1,7 +1,9 @@
 import Controller.Controller;
+import DAO.AuthorDAO;
 import DAO.PaintingDAO;
 import Exceptions.PaintingAlreadyExistsException;
 import Model.Painting;
+import Service.AuthorService;
 import Service.PaintingService;
 import Util.ConnectionSingleton;
 
@@ -13,7 +15,10 @@ public class Application {
     public static void main(String[] args) {
         Connection conn = ConnectionSingleton.getConnection();
         PaintingDAO paintingDAO = new PaintingDAO(conn);
-        PaintingService paintingService = new PaintingService(paintingDAO);
+        AuthorDAO authorDAO = new AuthorDAO(conn);
+        AuthorService authorService = new AuthorService(authorDAO);
+        PaintingService paintingService = new PaintingService(paintingDAO, authorService);
+
 
         Scanner sc = new Scanner(System.in);
         while(true){
@@ -21,15 +26,18 @@ public class Application {
                     "4: delete painting by title");
             int choice = Integer.parseInt(sc.nextLine());
             if(choice == 1){
-
+                System.out.println("enter painting id");
+                int paintingId = Integer.parseInt(sc.nextLine());
                 System.out.println("enter title");
                 String title = sc.nextLine();
                 System.out.println("enter author");
                 String author = sc.nextLine();
-                Painting p = new Painting(title, author);
+                System.out.println("enter year made");
+                int yearMade = Integer.parseInt(sc.nextLine());
+                Painting p = new Painting(paintingId, title, 0, yearMade);
 
                 try{
-                    paintingService.savePainting(p);
+                    paintingService.savePainting(p, author);
                 }catch(PaintingAlreadyExistsException e){
                     System.out.println("That painting already exists!");
                 }
@@ -48,7 +56,7 @@ public class Application {
                 String title = sc.nextLine();
                 System.out.println("enter author");
                 String author = sc.nextLine();
-                Painting p = new Painting(title, author);
+                Painting p = new Painting();
                 paintingService.updatePainting(p);
 
             }else if(choice == 4){
