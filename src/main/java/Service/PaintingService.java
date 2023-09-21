@@ -54,6 +54,9 @@ public class PaintingService {
             throw new PaintingAlreadyExistsException();
         }
     }
+    public Painting getPaintingById(int id){
+        return paintingDAO.queryPaintingById(id);
+    }
 
     /**
      * get all paintings

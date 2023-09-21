@@ -163,4 +163,23 @@ public class PaintingDAO {
         }
         return paintingList;
     }
+
+    public Painting queryPaintingById(int id) {
+        try{
+            PreparedStatement ps = conn.prepareStatement("select * from painting where painting_id = ?");
+            ps.setInt(1, id);
+            ResultSet rs = ps.executeQuery();
+            if(rs.next()){
+                int dbId = rs.getInt("painting_id");
+                String dbTitle = rs.getString("title");
+                int authorFkey = rs.getInt("made_by");
+                int yearMAde = rs.getInt("year_made");
+                Painting dbPainting = new Painting(dbId, dbTitle, authorFkey, yearMAde);
+                return dbPainting;
+            }
+        }catch(SQLException e){
+            e.printStackTrace();
+        }
+        return null;
+    }
 }

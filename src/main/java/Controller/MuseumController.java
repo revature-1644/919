@@ -35,6 +35,7 @@ public class MuseumController {
 
         app.get("painting", this::getAllPaintingsHandler);
         app.post("painting", this::postPaintingHandler);
+        app.get("painting/{id}", this::getPaintingByIdHandler);
         return app;
     }
 
@@ -54,4 +55,13 @@ public class MuseumController {
             context.status(400);
         }
     }
+    private void getPaintingByIdHandler(Context context){
+        int id = Integer.parseInt(context.pathParam("id"));
+        Painting p = paintingService.getPaintingById(id);
+        context.json(p);
+    }
+    /**
+     * todo: learn about query parameters & how to use them in javalin
+     */
+
 }
