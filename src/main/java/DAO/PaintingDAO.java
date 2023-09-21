@@ -11,6 +11,7 @@ import java.util.List;
 
 /**
  * Data access object
+ *
  * meaning : a style of object intended to contain methods that interact with a database, and, it manages the
  * conversion from database records to/from java objects
  *
@@ -136,6 +137,21 @@ public class PaintingDAO {
         try{
             PreparedStatement ps = conn.prepareStatement("select * from painting where year_made < ? order by year_made desc");
             ps.setInt(1, year);
+            ResultSet rs = ps.executeQuery();
+            while(rs.next()){
+                Painting dbPainting = new Painting(rs.getInt("painting_id"), rs.getString("title"),
+                        rs.getInt("made_by"), rs.getInt("year_made"));
+                paintingList.add(dbPainting);
+            }
+        }catch(SQLException e){
+            e.printStackTrace();
+        }
+        return paintingList;
+    }
+    public List<Painting> queryAllPaintings() {
+        List<Painting> paintingList = new ArrayList<>();
+        try{
+            PreparedStatement ps = conn.prepareStatement("select * from painting");
             ResultSet rs = ps.executeQuery();
             while(rs.next()){
                 Painting dbPainting = new Painting(rs.getInt("painting_id"), rs.getString("title"),

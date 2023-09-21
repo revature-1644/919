@@ -40,6 +40,29 @@ public class PaintingService {
         }
     }
 
+    /**
+     * Overload the savePainting method for the case where the full information for a painting is already known
+     * @param p
+     */
+    public void savePainting(Painting p) throws PaintingAlreadyExistsException {
+        Painting dbPainting = paintingDAO.queryPaintingsByTitleAndAuthor(p.getTitle(), p.getAuthorFkey());
+//        if it's null, i assume it doesn't exist, and i proceed with the insert.
+        if (dbPainting == null) {
+            paintingDAO.insertPainting(p);
+        }else{
+//            if it does exist, throw an exception to the user input layer so it may inform the user.
+            throw new PaintingAlreadyExistsException();
+        }
+    }
+
+    /**
+     * get all paintings
+     * @return
+     */
+    public List<Painting> getAllPaintings(){
+        return paintingDAO.queryAllPaintings();
+    }
+
     public List<Painting> getPaintingsByAuthor(String author){
         List<Painting> paintingList = paintingDAO.queryPaintingsByAuthor(author);
         return paintingList;
