@@ -118,7 +118,7 @@ public class PaintingDAO {
     public List<Painting> queryPaintingByYear(int year) {
         List<Painting> paintingList = new ArrayList<>();
         try{
-            PreparedStatement ps = conn.prepareStatement("select * from painting where year_made = ? order by year_made asc");
+            PreparedStatement ps = conn.prepareStatement("select * from painting where year_made = ?");
             ps.setInt(1, year);
             ResultSet rs = ps.executeQuery();
             while(rs.next()){
@@ -134,7 +134,7 @@ public class PaintingDAO {
     public List<Painting> queryPaintingBeforeYear(int year) {
         List<Painting> paintingList = new ArrayList<>();
         try{
-            PreparedStatement ps = conn.prepareStatement("select * from painting where year_made < ?");
+            PreparedStatement ps = conn.prepareStatement("select * from painting where year_made < ? order by year_made desc");
             ps.setInt(1, year);
             ResultSet rs = ps.executeQuery();
             while(rs.next()){
